@@ -1,0 +1,97 @@
+#include <stdio.h>   
+
+int main() {
+    char nama[10][50]; 
+    int n, i, predikatA = 0, predikatB = 0, predikatC = 0, predikatD = 0;
+    float tugas, uts, uas, remedial, nilaiAkhir[10];;
+    float tertinggi, terendah, total = 0;
+
+    FILE *file;
+    file = fopen("Rekap_Nilai.txt", "w"); 
+
+    printf("Masukkan jumlah mahasiswa (maks 10): ");
+    scanf("%d", &n);
+
+    if (n > 10 || n <= 0) {
+        printf("Jumlah mahasiswa tidak valid!\n");
+        return 0; 
+    }
+
+    for (i = 0; i < n; i++) {
+        printf("\nMahasiswa ke-%d\n", i + 1);
+
+        printf("Nama : ");
+        scanf("%s", nama[i]); 
+
+        printf("Nilai Tugas : ");
+        scanf("%f", &tugas);
+
+        printf("Nilai UTS  : ");
+        scanf("%f", &uts);
+
+        printf("Nilai UAS : ");
+        scanf("%f", &uas);
+
+        nilaiAkhir[i] = 0.3 * tugas + 0.3 * uts + 0.4 * uas;
+
+        if (nilaiAkhir[i] < 60) {
+            printf("Nilai kamu kurang dari 60, silahkan remedial: ");
+            scanf("%f", &remedial);
+
+            if (remedial > nilaiAkhir[i]) {
+                nilaiAkhir[i] = remedial;
+            }
+        }
+
+        total += nilaiAkhir[i]; 
+
+        if (nilaiAkhir[i] >= 80)
+            predikatA++;
+        else if (nilaiAkhir[i] >= 70)
+            predikatB++;
+        else if (nilaiAkhir[i] >= 60)
+            predikatC++;
+        else
+            predikatD++;
+
+        if (i == 0) {
+            tertinggi = terendah = nilaiAkhir[i];
+        } else {
+            if (nilaiAkhir[i] > tertinggi)
+                tertinggi = nilaiAkhir[i];
+
+            if (nilaiAkhir[i] < terendah)
+                terendah = nilaiAkhir[i];
+        }
+    }
+
+    float rataRata = total / n; 
+
+    printf("\n-------- REKAP NILAI KELAS --------\n");
+    fprintf(file, "-------- REKAP NILAI KELAS --------\n"); 
+
+    printf("Rata-rata kelas: %.2f\n", rataRata);
+    fprintf(file, "Rata-rata kelas: %.2f\n", rataRata);
+
+    printf("Jumlah Predikat A: %d\n", predikatA);
+    fprintf(file, "Jumlah Predikat A: %d\n", predikatA);
+
+    printf("Jumlah Predikat B: %d\n", predikatB);
+    fprintf(file, "Jumlah Predikat B: %d\n", predikatB);
+
+    printf("Jumlah Predikat C: %d\n", predikatC);
+    fprintf(file, "Jumlah Predikat C: %d\n", predikatC);
+
+    printf("Jumlah Predikat D: %d\n", predikatD);
+    fprintf(file, "Jumlah Predikat D: %d\n", predikatD);
+
+    printf("Nilai Tertinggi: %.2f\n", tertinggi);
+    fprintf(file, "Nilai Tertinggi: %.2f\n", tertinggi);
+
+    printf("Nilai Terendah: %.2f\n", terendah);
+    fprintf(file, "Nilai Terendah: %.2f\n", terendah);
+
+    fclose(file);
+
+    return 0; 
+} 
